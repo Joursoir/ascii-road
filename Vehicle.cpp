@@ -23,3 +23,8 @@ bool Vehicle::Draw(int bound_x)
 
 	return ret;
 }
+
+int Vehicle::GetLength()
+{
+	return veh_info[type].length;
+}

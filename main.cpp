@@ -39,15 +39,6 @@ void draw_background()
 	mvprintw(total_rows-3, 40, "       | |");
 	mvprintw(total_rows-2, 40, "       | |");
 	mvprintw(total_rows-1, 40, "______// \\\\");
-
-	refresh();
-}
-
-Vehicle *get_random_vehicle(int y, int x)
-{
-	Vehicle *car;
-	car = new Vehicle(rand() % veh_types_max, y, x);
-	return car;
 }
 
 int main(int argc, char *argv[])
@@ -63,24 +54,49 @@ int main(int argc, char *argv[])
 	getmaxyx(stdscr, total_rows, total_cols);
 
 	Vehicle *car = 0;
+	struct ll_vehicle *ptr_first = new struct ll_vehicle(0, 0);
+	struct ll_vehicle *ptr;
+	int wait_move = 0;
 	for(;;)
 	{
 		clear();
 		draw_background();
 
-		if(!car)
-			car = get_random_vehicle(total_rows, -1);
+		ptr = ptr_first;
+		while(ptr)
+		{
+			car = ptr->data;
+			if(!car) {
+				if(wait_move > 0)
+					break;
 
-		car->MoveRight();
-		if(!(car->Draw(total_cols))) {
-			delete car;
-			car = 0;
+				ptr->data = new Vehicle(
+					rand() % veh_types_max, total_rows, -1);
+				car = ptr->data;
+				wait_move = car->GetLength() + 3 + rand() % 10;
+
+				ptr->next = new struct ll_vehicle(0, 0);
+			}
+						
+			car->MoveRight();
+			if(!car->Draw(total_cols)) {
+				ptr = ptr->next;
+				delete car;
+				delete ptr_first;
+				ptr_first = ptr;
+				continue;
+			}
+
+			ptr = ptr->next;
 		}
+
+		if(wait_move > 0)
+			wait_move--;
 
 		refresh();
 		nanosleep(&my_timer, NULL);
 	}
-	
+
 	endwin();
 	return 0;
 }
