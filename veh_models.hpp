@@ -1,9 +1,9 @@
 #ifndef ASCIIROAD_VEHMODELS_H
 #define ASCIIROAD_VEHMODELS_H
 
-#define SUPPORT_CHAR ' '
+#include "models.hpp"
 
-enum vehicle_types {
+enum veh_types {
 	veh_default,
 	veh_ems,
 	veh_cabriolet,
@@ -16,21 +16,13 @@ enum vehicle_types {
 	veh_bicycle,
 	veh_manipulator,
 	veh_camper,
-	veh_types_max
+	veh_types_max,
 };
 
-struct vehicle_info {
-	const char * const *model;
-	int length;
-	int height;
-};
-
-/* SUPPORT_CHAR use only for support rectangular array */ 
 const char * const veh_default_model[] = {
 	"  ______     ",
 	" /|_||_\\`.__ ",
 	"(   _    _ _\\",
-	//"(___________\\",
 	"=`-(_)--(_)-'"
 };
 
@@ -117,7 +109,7 @@ const char * const veh_camper_model[] = {
 	"`--(_)-------(_)-'"
 };
 
-const struct vehicle_info veh_info[] = {
+const struct object_info veh_store[] = {
 	{veh_default_model, 13, 4},
 	{veh_ems_model, 22, 6},
 	{veh_cabriolet_model, 18, 4},
