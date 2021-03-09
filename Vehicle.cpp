@@ -2,29 +2,15 @@
 
 #include "Vehicle.hpp"
 #include "veh_models.hpp"
+#include "GameWorld.hpp"
 
-bool Vehicle::Draw(int bound_x)
+bool Vehicle::MoveRight(GameWorld *world)
 {
-	bool ret = false;
-	int i, j, k;
-	const struct vehicle_info car = veh_info[type];
+	const struct object_info *car = &veh_store[type];
+	int h = car->height, i;
+	for(i = 0; i < h; i++)
+		world->RedrawCh(pos_y - i, pos_x);
 
-	for(i = pos_x, j = car.length-1; i >= 0 && j >= 0; i--, j--) {
-		if(i >= bound_x)
-			continue;
-		ret = true;
-
-		int h = car.height;
-		for(k = 0; k < h; k++) {
-			if(car.model[k][j] != SUPPORT_CHAR)
-				mvaddch(pos_y - (h - k), i, car.model[k][j]);
-		}
-	}
-
-	return ret;
-}
-
-int Vehicle::GetLength()
-{
-	return veh_info[type].length;
+	pos_x++;
+	return world->Draw(car, pos_y, pos_x, false);
 }

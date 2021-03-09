@@ -1,6 +1,8 @@
 #ifndef ASCIIROAD_VEHICLE_H
 #define ASCIIROAD_VEHICLE_H
 
+class GameWorld;
+
 class Vehicle {
 	int type;
 	int pos_y, pos_x;
@@ -9,10 +11,7 @@ public:
 		: type(a_type), pos_y(a_y), pos_x(a_x) { }
 	~Vehicle() { }
 
-	int GetLength();
-
-	void MoveRight() { pos_x++; }
-	bool Draw(int bound_x); /* return false if not draw anything */
+	bool MoveRight(GameWorld *world); /* return false if not draw anything */
 };
 
 struct ll_vehicle {
